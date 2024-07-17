@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const user = require("./Routes/userAuthRoutes");
-const pet = require("./Routes/petUpdate");
+const pet = require("./Routes/petRoutes");
 const mongoose = require("mongoose");
 
 app.listen(3000, () => {
