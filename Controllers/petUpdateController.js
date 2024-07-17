@@ -5,7 +5,7 @@ const updatePetDetails = async (req, res) => {
     const petId = req.params.id;
     const { name, age, breed } = req.body;
 
-    const updatedPet = await Pet.findByIdAndUpdate(
+    const updatedPet = await petModel.findByIdAndUpdate(
       petId,
       { name, age, breed },
       { new: true }
