@@ -5,6 +5,32 @@ const jwt = require("jsonwebtoken");
 
 const Login = async (req, res) => {
   const { username, password } = req.body;
+  try {
+    const user = await UserModel.findOne({ username: username });
+    if (!user) {
+      return res.status(400).json({ error: "User doesn't exist" });
+    }
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ error: "Invaild Password" });
+    }
+
+    const token = jwt.sign({ id: user._id }, "TestingPurposeduncd", {
+      expiresIn: "12h",
+    });
+    res.cookie("jwt", token, {
+      httpOnly: true,
+    });
+
+    return res.status(201).json({ success: "Login Successful", user });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+};
+
+const Signup = async (req, res) => {
+  const { fullname, username, password } = req.body;
 
   try {
     const userNameExist = await UserModel.findOne({ username: username });
@@ -16,18 +42,19 @@ const Login = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await UserModel.create({
+      fullname,
       username,
       password: hashedPassword,
     });
 
-    const token = jwt.sign({ id: user._id }, "TestingPurpose", {
+    const token = jwt.sign({ id: user._id }, "TestingPurposeduncd", {
       expiresIn: "12h",
     });
     res.cookie("jwt", token, {
       httpOnly: true,
       sameSite: "strict",
     });
-    return res.status(201).json({ user });
+    return res.status(201).json({ success: "User registerd", user });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -41,4 +68,4 @@ const Logout = (req, res) => {
   }
 };
 
-module.exports = { Login, Logout };
+module.exports = { Signup, Login, Logout };
