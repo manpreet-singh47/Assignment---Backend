@@ -1,12 +1,11 @@
 const express = require("express");
 const {
   updatePetDetails,
-  createPetProfile,
+  getPetDetails,
 } = require("../Controllers/petUpdateController");
 const router = express.Router();
 
 router.put("/pets/:id", updatePetDetails);
-// router.get("/pets", updatePetDetails);
-router.post("/pets", createPetProfile);
+router.get("/pets", getPetDetails);
 
 module.exports = router;

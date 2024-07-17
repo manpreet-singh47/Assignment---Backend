@@ -20,14 +20,13 @@ const updatePetDetails = async (req, res) => {
   }
 };
 
-const createPetProfile = async (req, res) => {
-  const { name, age, breed } = req.body;
+const getPetDetails = async (req, res) => {
   try {
-    const pet = await petModel.create({ name: name, age: age, breed: breed });
-    return res.status(201).json(pet);
+    const pets = await petModel.find();
+    res.status(200).json(pets);
   } catch (error) {
     res.status(400).json(error.message);
   }
 };
 
-module.exports = { updatePetDetails, createPetProfile };
+module.exports = { updatePetDetails, getPetDetails };
