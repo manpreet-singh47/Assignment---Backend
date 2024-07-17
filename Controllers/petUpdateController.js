@@ -1,0 +1,21 @@
+const updatePetDetails = async (req, res) => {
+  try {
+    const petId = req.params.id;
+    const { name, age, breed } = req.body;
+
+    const updatedPet = await Pet.findByIdAndUpdate(
+      petId,
+      { name, age, breed },
+      { new: true }
+    );
+    if (updatedPet) {
+      res.status(200).json(updatedPet);
+    } else {
+      res.status(404).json({ message: "Pet not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = updatePetDetails;
